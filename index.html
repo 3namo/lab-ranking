@@ -124,7 +124,7 @@
       const li = document.createElement('li');
       const memo = savedMemos[lab] || '';
 
-      // 変更点：ハンドルの位置を右端に変更
+      // ハンドルの位置を右端に
       li.innerHTML = `
         <div class="item-header">
           <span class="rank">${index + 1}</span>
@@ -148,9 +148,7 @@
       localStorage.setItem(STORAGE_KEY, JSON.stringify(newOrder));
     }
 
-    // ==========================================================
     // 変更点：ここから、画面サイズに応じて操作方法を切り替える処理
-    // ==========================================================
     let sortableInstance = null;
 
     // 画面幅に応じてSortableJSのオプションを切り替える関数
@@ -182,9 +180,6 @@
     mediaQuery.addEventListener('change', (e) => {
       setupSortable(e.matches);
     });
-    // ==========================================================
-    // 変更点：ここまで
-    // ==========================================================
 
 
     document.querySelectorAll('.item-header').forEach(header => {
