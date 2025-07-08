@@ -77,6 +77,7 @@
       margin-left: 0.5rem;
       font-size: 0.9rem;
       display: none; /* 初期状態では非表示 */
+      filter: grayscale(1);
     }
 
     .save-status {
@@ -131,7 +132,7 @@
       const li = document.createElement('li');
       const memo = savedMemos[lab] || '';
 
-      // 変更点：メモアイコンと保存状態の要素を追加
+      // メモアイコンと保存状態の要素を追加
       li.innerHTML = `
         <div class="item-header">
           <span class="rank">${index + 1}</span>
