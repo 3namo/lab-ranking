@@ -72,6 +72,20 @@
       padding-left: 1rem;
     }
     
+    /* */
+    .memo-icon {
+      margin-left: 0.5rem;
+      font-size: 0.9rem;
+      display: none; /* 初期状態では非表示 */
+    }
+
+    .save-status {
+      margin-left: 0.5rem;
+      font-size: 0.8rem;
+      color: #888;
+    }
+    /* */
+
     @media (min-width: 768px) {
       .drag-handle {
         display: none;
@@ -86,7 +100,6 @@
     }
     
     .memo-panel textarea { width: 100%; height: 100px; font-family: sans-serif; padding: 0.5rem; font-size: 1rem; border-radius: 5px; border: 1px solid #bbb; resize: vertical; background: #fdfdfd; }
-    /* */
     @media (max-width: 600px) { .rank { width: 1.5rem; } }
   </style>
 </head>
@@ -118,10 +131,13 @@
       const li = document.createElement('li');
       const memo = savedMemos[lab] || '';
 
+      // 変更点：メモアイコンと保存状態の要素を追加
       li.innerHTML = `
         <div class="item-header">
           <span class="rank">${index + 1}</span>
           <span class="name">${lab}</span>
+          <span class="memo-icon">📝</span>
+          <span class="save-status"></span>
           <span class="drag-handle">☰</span>
         </div>
         <div class="memo-panel">
@@ -129,6 +145,11 @@
         </div>
       `;
       ul.appendChild(li);
+
+      // メモがあればアイコンを表示
+      if (memo) {
+        li.querySelector('.memo-icon').style.display = 'inline';
+      }
     });
 
     function updateRanksAndSave() {
@@ -167,23 +188,47 @@
 
 
     document.querySelectorAll('.item-header').forEach(header => {
-      header.addEventListener('click', () => {
+      header.addEventListener('click', (e) => {
+        // ハンドルをクリックした場合はメモを開かないようにする
+        if (e.target.classList.contains('drag-handle')) {
+          return;
+        }
         const panel = header.nextElementSibling;
         panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
       });
     });
-
-    // ここから、自動保存の処理
+    
+    // 自動保存処理を強化
+    let saveTimer = null; // タイマーを管理する変数
     document.querySelectorAll('.memo-panel textarea').forEach(textarea => {
-      // 'input'イベントは、テキストエリアの内容が変更されるたびに発生します
       textarea.addEventListener('input', () => {
-        const memoText = textarea.value;
-        const labName = textarea.closest('li').querySelector('.name').textContent;
+        const li = textarea.closest('li');
+        const labName = li.querySelector('.name').textContent;
+        const memoIcon = li.querySelector('.memo-icon');
+        const saveStatus = li.querySelector('.save-status');
+
+        // メモアイコンの表示/非表示を切り替え
+        memoIcon.style.display = textarea.value ? 'inline' : 'none';
         
-        // 対応する研究室のメモを更新
-        savedMemos[labName] = memoText;
-        // localStorageに保存
-        localStorage.setItem(MEMO_KEY, JSON.stringify(savedMemos));
+        // 保存状態を表示
+        saveStatus.textContent = '保存中...';
+
+        // 以前のタイマーをクリア
+        clearTimeout(saveTimer);
+
+        // 500ミリ秒後に保存を実行
+        saveTimer = setTimeout(() => {
+          const memoText = textarea.value;
+          savedMemos[labName] = memoText;
+          localStorage.setItem(MEMO_KEY, JSON.stringify(savedMemos));
+          
+          // 保存完了メッセージを表示し、1.5秒後に消す
+          saveStatus.textContent = '保存済み ✔';
+          setTimeout(() => {
+            saveStatus.textContent = '';
+          }, 1500);
+
+        }, 500); // 連続入力に対応するため、少し遅延させる
       });
     });
 
