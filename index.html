@@ -49,12 +49,19 @@
 
     .item-header {
       display: flex;
-      justify-content: space-between;
       align-items: center;
       padding: 0.8rem 1rem;
       cursor: pointer;
     }
 
+    .drag-handle {
+      cursor: move;
+      color: #888;
+      font-size: 1.2rem;
+      /* */
+      padding-left: 0.8rem; 
+    }
+    
     .rank {
       font-weight: bold;
       width: 2rem;
@@ -62,9 +69,18 @@
     }
 
     .name {
-      flex: 1;
+      flex: 1; /* */
       padding-left: 1rem;
     }
+    
+    /* */
+    /* PCなど広い画面ではハンドルを非表示にする */
+    @media (min-width: 768px) {
+      .drag-handle {
+        display: none;
+      }
+    }
+    /* */
 
     .memo-panel {
       display: none;
@@ -72,38 +88,12 @@
       background: #eaeaea;
       border-top: 1px solid #ccc;
     }
-
-    .memo-panel textarea {
-      width: 100%;
-      height: 100px;
-      font-family: sans-serif;
-      padding: 0.5rem;
-      font-size: 1rem;
-      border-radius: 5px;
-      border: 1px solid #bbb;
-      resize: vertical;
-      background: #fdfdfd;
-    }
-
-    .memo-panel button {
-      margin-top: 0.5rem;
-      background-color: #555;
-      color: white;
-      border: none;
-      padding: 0.4rem 1rem;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    .memo-panel button:hover {
-      background-color: #333;
-    }
-
-    @media (max-width: 600px) {
-      .rank {
-        width: 1.5rem;
-      }
-    }
+    
+    /* (以下、他のCSSは変更なし) */
+    .memo-panel textarea { width: 100%; height: 100px; font-family: sans-serif; padding: 0.5rem; font-size: 1rem; border-radius: 5px; border: 1px solid #bbb; resize: vertical; background: #fdfdfd; }
+    .memo-panel button { margin-top: 0.5rem; background-color: #555; color: white; border: none; padding: 0.4rem 1rem; border-radius: 5px; cursor: pointer; }
+    .memo-panel button:hover { background-color: #333; }
+    @media (max-width: 600px) { .rank { width: 1.5rem; } }
   </style>
 </head>
 <body>
@@ -114,23 +104,12 @@
 
   <script>
     const defaultLabs = [
-      "情報ネットワーク（小川）",
-      "情報安全技術（八槇）",
-      "知的情報空間（松井）",
-      "インターネットテクノロジ（冬爪）",
-      "先端計算システム（上野）",
-      "パターン・メディア情報学（大山）",
-      "生体信号処理（川勝）",
-      "無線通信セキュリティ（朱）",
-      "分散システム（中村）",
-      "3次元グラフィックス（新津）",
-      "ソフトウェア工学（阿部清彦）",
-      "ユニバーサル・ソフトウェア・デザイン（宮川）",
-      "信号処理応用（小濱）",
-      "マルチメディアコンピューティング（阿部博信）",
-      "データ科学・機械学習（前田）",
-      "スマート社会システム（荒川）",
-      "知覚情報処理（小篠）"
+      "情報ネットワーク（小川）", "情報安全技術（八槇）", "知的情報空間（松井）",
+      "インターネットテクノロジ（冬爪）", "先端計算システム（上野）", "パターン・メディア情報学（大山）",
+      "生体信号処理（川勝）", "無線通信セキュリティ（朱）", "分散システム（中村）",
+      "3次元グラフィックス（新津）", "ソフトウェア工学（阿部清彦）", "ユニバーサル・ソフトウェア・デザイン（宮川）",
+      "信号処理応用（小濱）", "マルチメディアコンピューティング（阿部博信）", "データ科学・機械学習（前田）",
+      "スマート社会システム（荒川）", "知覚情報処理（小篠）"
     ];
 
     const STORAGE_KEY = 'lab_order';
@@ -145,10 +124,12 @@
       const li = document.createElement('li');
       const memo = savedMemos[lab] || '';
 
+      // 変更点：ハンドルの位置を右端に変更
       li.innerHTML = `
         <div class="item-header">
           <span class="rank">${index + 1}</span>
           <span class="name">${lab}</span>
+          <span class="drag-handle">☰</span>
         </div>
         <div class="memo-panel">
           <textarea placeholder="メモを入力...">${memo}</textarea>
@@ -167,10 +148,44 @@
       localStorage.setItem(STORAGE_KEY, JSON.stringify(newOrder));
     }
 
-    new Sortable(ul, {
-      animation: 200,
-      onEnd: updateRanksAndSave
+    // ==========================================================
+    // 変更点：ここから、画面サイズに応じて操作方法を切り替える処理
+    // ==========================================================
+    let sortableInstance = null;
+
+    // 画面幅に応じてSortableJSのオプションを切り替える関数
+    function setupSortable(isMobile) {
+      if (sortableInstance) {
+        sortableInstance.destroy(); // 既存の設定を破棄
+      }
+
+      const options = {
+        animation: 200,
+        onEnd: updateRanksAndSave,
+      };
+
+      if (isMobile) {
+        // モバイルの場合だけハンドルを有効にする
+        options.handle = '.drag-handle';
+      }
+      
+      sortableInstance = new Sortable(ul, options);
+    }
+
+    // 画面幅をチェックするためのメディアクエリ
+    const mediaQuery = window.matchMedia('(max-width: 767px)');
+
+    // 初期読み込み時に実行
+    setupSortable(mediaQuery.matches);
+
+    // 画面サイズが変更されたときに実行
+    mediaQuery.addEventListener('change', (e) => {
+      setupSortable(e.matches);
     });
+    // ==========================================================
+    // 変更点：ここまで
+    // ==========================================================
+
 
     document.querySelectorAll('.item-header').forEach(header => {
       header.addEventListener('click', () => {
