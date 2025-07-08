@@ -58,7 +58,6 @@
       cursor: move;
       color: #888;
       font-size: 1.2rem;
-      /* */
       padding-left: 0.8rem; 
     }
     
@@ -69,18 +68,15 @@
     }
 
     .name {
-      flex: 1; /* */
+      flex: 1;
       padding-left: 1rem;
     }
     
-    /* */
-    /* PCなど広い画面ではハンドルを非表示にする */
     @media (min-width: 768px) {
       .drag-handle {
         display: none;
       }
     }
-    /* */
 
     .memo-panel {
       display: none;
@@ -89,10 +85,8 @@
       border-top: 1px solid #ccc;
     }
     
-    /* (以下、他のCSSは変更なし) */
     .memo-panel textarea { width: 100%; height: 100px; font-family: sans-serif; padding: 0.5rem; font-size: 1rem; border-radius: 5px; border: 1px solid #bbb; resize: vertical; background: #fdfdfd; }
-    .memo-panel button { margin-top: 0.5rem; background-color: #555; color: white; border: none; padding: 0.4rem 1rem; border-radius: 5px; cursor: pointer; }
-    .memo-panel button:hover { background-color: #333; }
+    /* */
     @media (max-width: 600px) { .rank { width: 1.5rem; } }
   </style>
 </head>
@@ -124,7 +118,6 @@
       const li = document.createElement('li');
       const memo = savedMemos[lab] || '';
 
-      // ハンドルの位置を右端に
       li.innerHTML = `
         <div class="item-header">
           <span class="rank">${index + 1}</span>
@@ -133,7 +126,6 @@
         </div>
         <div class="memo-panel">
           <textarea placeholder="メモを入力...">${memo}</textarea>
-          <button>保存</button>
         </div>
       `;
       ul.appendChild(li);
@@ -148,13 +140,11 @@
       localStorage.setItem(STORAGE_KEY, JSON.stringify(newOrder));
     }
 
-    // 変更点：ここから、画面サイズに応じて操作方法を切り替える処理
     let sortableInstance = null;
 
-    // 画面幅に応じてSortableJSのオプションを切り替える関数
     function setupSortable(isMobile) {
       if (sortableInstance) {
-        sortableInstance.destroy(); // 既存の設定を破棄
+        sortableInstance.destroy();
       }
 
       const options = {
@@ -163,20 +153,14 @@
       };
 
       if (isMobile) {
-        // モバイルの場合だけハンドルを有効にする
         options.handle = '.drag-handle';
       }
       
       sortableInstance = new Sortable(ul, options);
     }
 
-    // 画面幅をチェックするためのメディアクエリ
     const mediaQuery = window.matchMedia('(max-width: 767px)');
-
-    // 初期読み込み時に実行
     setupSortable(mediaQuery.matches);
-
-    // 画面サイズが変更されたときに実行
     mediaQuery.addEventListener('change', (e) => {
       setupSortable(e.matches);
     });
@@ -189,14 +173,17 @@
       });
     });
 
-    document.querySelectorAll('.memo-panel button').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const memoText = btn.previousElementSibling.value;
-        const labName = btn.closest('li').querySelector('.name').textContent;
+    // ここから、自動保存の処理
+    document.querySelectorAll('.memo-panel textarea').forEach(textarea => {
+      // 'input'イベントは、テキストエリアの内容が変更されるたびに発生します
+      textarea.addEventListener('input', () => {
+        const memoText = textarea.value;
+        const labName = textarea.closest('li').querySelector('.name').textContent;
+        
+        // 対応する研究室のメモを更新
         savedMemos[labName] = memoText;
+        // localStorageに保存
         localStorage.setItem(MEMO_KEY, JSON.stringify(savedMemos));
-        alert(`「${labName}」のメモを保存しました`);
       });
     });
 
