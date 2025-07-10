@@ -15,21 +15,22 @@
             margin: 0; 
             background-color: var(--bg-color); 
             color: var(--text-color); 
-            line-height: 1.6; /* 行の高さを調整 */
+            line-height: 1.6;
         }
         .container { 
             max-width: 800px; 
             margin: 2rem auto; 
             padding: 0 1rem; 
-            box-sizing: border-box; /* パディングを含めて幅を計算 */
+            box-sizing: border-box;
         }
         h1, h2 { 
             text-align: center; 
             color: #444; 
-            font-size: 1.8rem; /* h1のフォントサイズ調整 */
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
         }
         h2 { 
-            font-size: 1.4rem; /* h2のフォントサイズ調整 */
+            font-size: 1.4rem;
             margin-top: 2.5rem; 
             border-bottom: 2px solid var(--border-color); 
             padding-bottom: 0.5rem; 
@@ -39,31 +40,31 @@
             justify-content: space-between; 
             align-items: center; 
             margin: 1.5rem 0; 
-            flex-wrap: wrap; /* 要素が収まらない場合に折り返す */
-            gap: 0.75rem; /* 要素間の隙間を調整 */
+            flex-wrap: wrap; 
+            gap: 0.75rem;
         }
         .search-bar { 
             flex-grow: 1; 
-            min-width: 180px; /* 最小幅を調整 */
-            padding: 0.6rem 1rem; /* パディングを調整 */
+            min-width: 180px;
+            padding: 0.6rem 1rem;
             border: 1px solid var(--border-color); 
             border-radius: 20px; 
-            font-size: 1rem; /* フォントサイズ調整 */
+            font-size: 1rem;
         }
         .toolbar-group { 
             display: flex; 
-            gap: 0.5rem; 
-            flex-wrap: wrap; /* ボタンが収まらない場合に折り返す */
+            gap: 0.5rem;
+            flex-wrap: wrap; 
         }
         .toolbar-btn {
-            padding: 0.6rem 1.2rem; /* パディングを調整 */
+            padding: 0.5rem 1rem;
             border: 1px solid var(--border-color); 
             background-color: var(--bg-alt-color);
             border-radius: 20px; 
             cursor: pointer; 
             transition: background-color 0.2s, color 0.2s;
-            font-size: 0.95rem; /* フォントサイズ調整 */
-            white-space: nowrap; /* ボタン内のテキストが改行されないように */
+            font-size: 0.9rem;
+            white-space: nowrap;
         }
         .toolbar-btn:hover { background-color: #e9ecef; }
         #company-list, #archived-list { margin-top: 1rem; }
@@ -79,24 +80,25 @@
             display: flex; 
             align-items: center; 
             gap: 0.5rem; 
-            padding: 0.75rem 1rem; /* パディングを調整 */
+            padding: 0.75rem 1rem;
             cursor: pointer; 
-            flex-wrap: wrap; /* サマリー内の要素が収まらない場合に折り返す */
+            flex-wrap: wrap; 
         }
         .company-name { 
             font-weight: bold; 
-            font-size: 1.1rem; /* フォントサイズ調整 */
-            flex-grow: 1; 
+            font-size: 1.1rem;
+            flex-grow: 2;
+            min-width: 150px;
             padding: 0.25rem; 
-            min-width: 120px; /* 最小幅を設定 */
         }
         .status-select { 
             padding: 0.5rem; 
             border: 1px solid var(--border-color); 
             border-radius: 4px; 
             font-size: 0.9rem; 
-            min-width: 100px; /* 最小幅を調整 */
-            flex-shrink: 0; /* 縮小させない */
+            min-width: 100px;
+            flex-shrink: 0;
+            margin-left: auto;
         }
         .action-btn { 
             background: none; 
@@ -104,21 +106,24 @@
             color: #aaa; 
             cursor: pointer; 
             font-size: 1.2rem; 
-            padding: 0 0.5rem; 
+            padding: 0 0.25rem;
             transition: color 0.2s; 
             vertical-align: middle; 
-            flex-shrink: 0; /* 縮小させない */
+            flex-shrink: 0;
         }
         .edit-name-btn:hover { color: var(--accent-color); }
         .kebab-btn { 
             font-size: 1.5rem; 
             font-weight: bold; 
             border-radius: 50%; 
-            width: 40px; 
-            height: 40px; 
-            display: flex; /* 中央寄せのため */
-            align-items: center; /* 中央寄せのため */
-            justify-content: center; /* 中央寄せのため */
+            width: 36px;
+            height: 36px;
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            padding: 0;
+            margin-left: 0;
+            margin-right: -0.25rem;
         }
         .kebab-btn:hover { background-color: #f0f0f0; }
         .menu-container { position: relative; flex-shrink: 0; }
@@ -146,7 +151,7 @@
             border: none; 
             background: none; 
             cursor: pointer; 
-            font-size: 0.95rem; /* フォントサイズ調整 */
+            font-size: 0.95rem;
         }
         .kebab-menu button:hover { background-color: #f0f0f0; }
         .kebab-menu button.delete { color: var(--danger-color); }
@@ -158,25 +163,25 @@
         .detail-grid { 
             display: grid; 
             gap: 1rem; 
-            grid-template-columns: 1fr; /* スマートフォンでは1列表示 */
+            grid-template-columns: 1fr;
         }
-        @media (min-width: 600px) { /* 画面幅が600px以上の場合 */
+        @media (min-width: 600px) {
             .detail-grid {
-                grid-template-columns: 1fr 1fr; /* PCでは2列表示 */
+                grid-template-columns: 1fr 1fr;
             }
         }
         .detail-field { display: flex; flex-direction: column; }
         .detail-field label { 
-            font-size: 0.85rem; /* フォントサイズ調整 */
+            font-size: 0.85rem;
             color: #666; 
             margin-bottom: 0.25rem; 
         }
         .detail-field input { 
             width: 100%; 
-            padding: 0.6rem; /* パディングを調整 */
+            padding: 0.6rem;
             border: 1px solid var(--border-color); 
             border-radius: 4px; 
-            font-size: 0.9rem; /* フォントサイズ調整 */
+            font-size: 0.9rem;
             box-sizing: border-box; 
         }
         .url-field { 
@@ -186,56 +191,61 @@
             gap: 0.5rem; 
         }
         .url-link { font-size: 1.2rem; text-decoration: none; }
-        .add-container { text-align: center; margin-top: 1rem; }
+        .add-container { 
+            text-align: center; 
+            margin-top: 1rem; 
+        }
         #add-company-btn { 
             background-color: var(--accent-color); 
             color: white; 
             border: none; 
-            border-radius: 50%; 
-            width: 50px; 
-            height: 50px; 
-            font-size: 2rem; 
+            border-radius: 50%;
+            width: 56px;
+            height: 56px;
+            font-size: 2.2rem;
             cursor: pointer; 
-            line-height: 50px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: background-color 0.2s; 
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* ボタンに影を追加 */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            line-height: 1;
+            /* ここを修正：ボタン自体を中央寄せ */
+            margin: 0 auto; 
+            display: block; /* text-align: center; で中央寄せするためにブロック要素にする */
         }
         #add-company-btn:hover { background-color: #0056b3; }
         #add-company-form { 
             display: none; 
-            flex-direction: column; /* スマートフォンでは縦に並べる */
+            flex-direction: row;
+            flex-wrap: wrap;
             gap: 0.75rem; 
-            align-items: stretch; /* 幅いっぱいに広げる */
+            align-items: center;
+            justify-content: center;
             padding: 1.2rem; 
             background-color: #fff; 
             border-radius: 8px; 
             border: 1px solid var(--border-color); 
-            max-width: 450px; /* 最大幅を設定 */
-            margin: 0 auto; /* 中央寄せ */
+            max-width: 600px;
+            margin: 0 auto; 
             box-sizing: border-box;
         }
-        @media (min-width: 500px) { /* ある程度の画面幅があれば横並び */
-            #add-company-form {
-                flex-direction: row;
-                align-items: center;
-                max-width: 800px;
-            }
-        }
         #new-company-name { 
-            padding: 0.75rem; /* パディングを調整 */
+            padding: 0.75rem;
             border: 1px solid var(--border-color); 
             border-radius: 4px; 
             font-size: 1rem; 
             flex-grow: 1; 
+            min-width: 150px;
             box-sizing: border-box;
         }
         .form-btn { 
-            padding: 0.75rem 1.2rem; /* パディングを調整 */
+            padding: 0.75rem 1.2rem;
             border: none; 
             border-radius: 4px; 
             cursor: pointer; 
             font-weight: bold; 
-            font-size: 1rem; /* フォントサイズ調整 */
+            font-size: 1rem;
             flex-shrink: 0;
             white-space: nowrap;
         }
@@ -247,7 +257,7 @@
             left: 0; 
             width: 100%; 
             height: 100%; 
-            background: rgba(0,0,0,0.6); /* 背景を少し濃く */
+            background: rgba(0,0,0,0.6);
             display: none; 
             justify-content: center; 
             align-items: center; 
@@ -255,10 +265,10 @@
         }
         .modal-content { 
             background: white; 
-            padding: 1.5rem; /* パディングを調整 */
+            padding: 1.5rem;
             border-radius: 8px; 
             width: 90%; 
-            max-width: 450px; /* 最大幅を調整 */
+            max-width: 450px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3); 
             box-sizing: border-box;
         }
@@ -270,18 +280,25 @@
             overflow-y: auto; 
             border: 1px solid var(--border-color); 
             border-radius: 4px; 
-            font-size: 0.95rem; /* フォントサイズ調整 */
+            font-size: 0.95rem;
         }
         #status-options-list li { 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            padding: 0.75rem 0.5rem; /* パディングを調整 */
+            padding: 0.75rem 0.5rem;
             border-bottom: 1px solid var(--border-color); 
             cursor: move; 
         }
-        #status-options-list li:last-child { border-bottom: none; } /* 最後の要素の下線は削除 */
-        #status-options-list li .delete-btn { font-size: 1.1rem; padding: 0.2rem 0.5rem; } /* 削除ボタンのサイズ調整 */
+        #status-options-list li:last-child { border-bottom: none; }
+        #status-options-list li .delete-btn { 
+            font-size: 1.1rem; 
+            padding: 0.2rem 0.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #aaa;
+        }
         #status-options-list li .delete-btn:hover { color: var(--danger-color); }
         #add-status-form { 
             display: flex; 
@@ -291,25 +308,25 @@
         .modal-footer { margin-top: 1.5rem; text-align: right; }
         #toast-container { 
             position: fixed; 
-            bottom: 15px; /* 下からの位置調整 */
+            bottom: 15px; 
             left: 50%; 
             transform: translateX(-50%); 
             z-index: 2000; 
             display: flex; 
             flex-direction: column-reverse; 
             align-items: center; 
-            width: 90%; /* 幅を調整 */
-            max-width: 350px; /* 最大幅を設定 */
+            width: 90%; 
+            max-width: 350px;
         }
         .toast {
-            background-color: rgba(0,0,0,0.85); /* 背景色を少し濃く */
+            background-color: rgba(0,0,0,0.85);
             color: white; 
-            padding: 0.8rem 1.2rem; /* パディングを調整 */
+            padding: 0.8rem 1.2rem;
             border-radius: 8px; 
             margin-top: 0.5rem; 
             opacity: 0;
             animation: fadeInOut 3s forwards;
-            font-size: 0.95rem; /* フォントサイズ調整 */
+            font-size: 0.95rem;
             text-align: center;
         }
         @keyframes fadeInOut {
@@ -332,7 +349,11 @@
         <div id="company-list"></div>
         <div class="add-container">
             <button id="add-company-btn" title="企業を追加">+</button>
-            <form id="add-company-form"><input type="text" id="new-company-name" placeholder="企業名を入力" required><button type="submit" class="form-btn add-new-btn">追加</button><button type="button" id="cancel-add-btn" class="form-btn cancel-add-btn">キャンセル</button></form>
+            <form id="add-company-form">
+                <input type="text" id="new-company-name" placeholder="企業名を入力" required>
+                <button type="submit" class="form-btn add-new-btn">追加</button>
+                <button type="button" id="cancel-add-btn" class="form-btn cancel-add-btn">キャンセル</button>
+            </form>
         </div>
         <div id="archive-section" style="display: none;">
             <h2>アーカイブ済みリスト</h2>
@@ -353,8 +374,13 @@
             <h3>選考ステータスの管理</h3>
             <p>ドラッグ＆ドロップで並び替えができます。</p>
             <ul id="status-options-list"></ul>
-            <form id="add-status-form"><input type="text" id="new-status-name" placeholder="新しいステータス名" required style="flex-grow:1; padding: 0.5rem;"><button type="submit" class="form-btn add-new-btn">追加</button></form>
-            <div class="modal-footer"><button id="close-modal-btn" class="toolbar-btn">閉じる</button></div>
+            <form id="add-status-form">
+                <input type="text" id="new-status-name" placeholder="新しいステータス名" required style="flex-grow:1; padding: 0.5rem;">
+                <button type="submit" class="form-btn add-new-btn">追加</button>
+            </form>
+            <div class="modal-footer">
+                <button id="close-modal-btn" class="toolbar-btn">閉じる</button>
+            </div>
         </div>
     </div>
     <div id="toast-container"></div>
@@ -645,7 +671,7 @@
                 newCompanyNameInput.focus();
             };
             const hideAddForm = () => {
-                addCompanyBtn.style.display = 'inline-block';
+                addCompanyBtn.style.display = 'block'; // 元のdisplayプロパティに戻す
                 addCompanyForm.style.display = 'none';
                 newCompanyNameInput.value = ''; // 入力値をクリア
             };
